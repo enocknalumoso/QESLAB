@@ -1,0 +1,756 @@
+--- QESLAB ATOMIC BLUEPRINT ---
+1. DIRECTORY STRUCTURE:
+/root/qeslab
+/root/qeslab/tests
+/root/qeslab/scripts
+/root/qeslab/scripts/backup.sh
+/root/qeslab/scripts/test_pipeline_flow.py
+/root/qeslab/scripts/start_qeslab.sh
+/root/qeslab/scripts/dry_run.py
+/root/qeslab/scripts/run_mt5.sh
+/root/qeslab/scripts/init_databases.py
+/root/qeslab/scripts/healthcheck.sh
+/root/qeslab/main.py
+/root/qeslab/logs
+/root/qeslab/backups
+/root/qeslab/core
+/root/qeslab/core/data_pipeline.py
+/root/qeslab/core/orchestrator.py
+/root/qeslab/core/__pycache__
+/root/qeslab/core/__pycache__/risk_engine.cpython-312.pyc
+/root/qeslab/core/__pycache__/orchestrator.cpython-312.pyc
+/root/qeslab/core/__pycache__/pocket_manager.cpython-312.pyc
+/root/qeslab/core/__pycache__/__init__.cpython-312.pyc
+/root/qeslab/core/__pycache__/correlation_monitor.cpython-312.pyc
+/root/qeslab/core/__pycache__/mt5_bridge.cpython-312.pyc
+/root/qeslab/core/__pycache__/stream_controller.cpython-312.pyc
+/root/qeslab/core/__pycache__/health_monitor.cpython-312.pyc
+/root/qeslab/core/__pycache__/strategy_vault.cpython-312.pyc
+/root/qeslab/core/__init__.py
+/root/qeslab/core/risk_engine.py
+/root/qeslab/core/strategy_vault.py
+/root/qeslab/core/binary_backtester.py
+/root/qeslab/core/pocket_manager.py
+/root/qeslab/core/health_monitor.py
+/root/qeslab/core/mt5_bridge.py
+/root/qeslab/core/backtester.py
+/root/qeslab/core/stream_controller.py
+/root/qeslab/core/correlation_monitor.py
+/root/qeslab/core/portfolio_layer.py
+/root/qeslab/core/resampler.py
+/root/qeslab/core/universe_screener.py
+/root/qeslab/core/performance_attr.py
+/root/qeslab/data
+/root/qeslab/data/raw
+/root/qeslab/data/raw/GBPUSD.parquet
+/root/qeslab/data/raw/USDCAD.parquet
+/root/qeslab/data/raw/EURJPY.parquet
+/root/qeslab/data/raw/AUDJPY.parquet
+/root/qeslab/data/raw/USDCHF.parquet
+/root/qeslab/data/raw/AUDUSD.parquet
+/root/qeslab/data/raw/EURUSD.parquet
+/root/qeslab/data/raw/GBPJPY.parquet
+/root/qeslab/data/raw/USDJPY.parquet
+/root/qeslab/data/raw/CADJPY.parquet
+/root/qeslab/data/resampled
+/root/qeslab/data/resampled/USDJPY_H6.parquet
+/root/qeslab/data/resampled/GBPJPY_H12.parquet
+/root/qeslab/data/resampled/GBPUSD_M30.parquet
+/root/qeslab/data/resampled/AUDJPY_H8.parquet
+/root/qeslab/data/resampled/AUDJPY_M5.parquet
+/root/qeslab/data/resampled/EURUSD_H8.parquet
+/root/qeslab/data/resampled/CADJPY_M15.parquet
+/root/qeslab/data/resampled/USDJPY_M3.parquet
+/root/qeslab/data/resampled/USDJPY_D1.parquet
+/root/qeslab/data/resampled/AUDJPY_H1.parquet
+/root/qeslab/data/resampled/AUDUSD_M30.parquet
+/root/qeslab/data/resampled/USDJPY_H4.parquet
+/root/qeslab/data/resampled/EURJPY_H12.parquet
+/root/qeslab/data/resampled/AUDUSD_H4.parquet
+/root/qeslab/data/resampled/USDCAD_M5.parquet
+/root/qeslab/data/resampled/CADJPY_M1.parquet
+/root/qeslab/data/resampled/USDCHF_M1.parquet
+/root/qeslab/data/resampled/USDCHF_H8.parquet
+/root/qeslab/data/resampled/CADJPY_H4.parquet
+/root/qeslab/data/resampled/AUDJPY_M1.parquet
+/root/qeslab/data/resampled/USDCHF_H6.parquet
+/root/qeslab/data/resampled/GBPJPY_H6.parquet
+/root/qeslab/data/resampled/GBPJPY_D1.parquet
+/root/qeslab/data/resampled/AUDUSD_H12.parquet
+/root/qeslab/data/resampled/USDJPY_M30.parquet
+/root/qeslab/data/resampled/AUDJPY_M3.parquet
+/root/qeslab/data/resampled/USDCAD_M2.parquet
+/root/qeslab/data/resampled/AUDUSD_M10.parquet
+/root/qeslab/data/resampled/AUDJPY_H12.parquet
+/root/qeslab/data/resampled/AUDUSD_M5.parquet
+/root/qeslab/data/resampled/EURJPY_H6.parquet
+/root/qeslab/data/resampled/AUDJPY_M10.parquet
+/root/qeslab/data/resampled/GBPJPY_M1.parquet
+/root/qeslab/data/resampled/USDCAD_H12.parquet
+/root/qeslab/data/resampled/USDCAD_H2.parquet
+/root/qeslab/data/resampled/USDCHF_M30.parquet
+/root/qeslab/data/resampled/USDCHF_H12.parquet
+/root/qeslab/data/resampled/GBPUSD_D1.parquet
+/root/qeslab/data/resampled/CADJPY_H1.parquet
+/root/qeslab/data/resampled/CADJPY_M10.parquet
+/root/qeslab/data/resampled/EURUSD_H12.parquet
+/root/qeslab/data/resampled/USDCHF_D1.parquet
+/root/qeslab/data/resampled/USDCAD_H4.parquet
+/root/qeslab/data/resampled/EURJPY_M5.parquet
+/root/qeslab/data/resampled/AUDUSD_M1.parquet
+/root/qeslab/data/resampled/GBPUSD_M3.parquet
+/root/qeslab/data/resampled/GBPUSD_M2.parquet
+/root/qeslab/data/resampled/USDCAD_M10.parquet
+/root/qeslab/data/resampled/USDCAD_M3.parquet
+/root/qeslab/data/resampled/GBPJPY_M3.parquet
+/root/qeslab/data/resampled/USDJPY_M5.parquet
+/root/qeslab/data/resampled/CADJPY_H6.parquet
+/root/qeslab/data/resampled/AUDJPY_H2.parquet
+/root/qeslab/data/resampled/GBPJPY_H2.parquet
+/root/qeslab/data/resampled/AUDJPY_H6.parquet
+/root/qeslab/data/resampled/USDCHF_M15.parquet
+/root/qeslab/data/resampled/EURUSD_M5.parquet
+/root/qeslab/data/resampled/CADJPY_H12.parquet
+/root/qeslab/data/resampled/CADJPY_H8.parquet
+/root/qeslab/data/resampled/EURJPY_D1.parquet
+/root/qeslab/data/resampled/USDJPY_M2.parquet
+/root/qeslab/data/resampled/AUDUSD_D1.parquet
+/root/qeslab/data/resampled/AUDJPY_M15.parquet
+/root/qeslab/data/resampled/GBPJPY_M2.parquet
+/root/qeslab/data/resampled/EURJPY_M3.parquet
+/root/qeslab/data/resampled/USDCAD_H8.parquet
+/root/qeslab/data/resampled/GBPUSD_M10.parquet
+/root/qeslab/data/resampled/EURUSD_M3.parquet
+/root/qeslab/data/resampled/EURJPY_H1.parquet
+/root/qeslab/data/resampled/EURUSD_H6.parquet
+/root/qeslab/data/resampled/CADJPY_M3.parquet
+/root/qeslab/data/resampled/USDCAD_M15.parquet
+/root/qeslab/data/resampled/GBPJPY_H4.parquet
+/root/qeslab/data/resampled/EURJPY_W1.parquet
+/root/qeslab/data/resampled/AUDJPY_M30.parquet
+/root/qeslab/data/resampled/EURUSD_M30.parquet
+/root/qeslab/data/resampled/GBPUSD_H4.parquet
+/root/qeslab/data/resampled/EURUSD_H4.parquet
+/root/qeslab/data/resampled/GBPJPY_H1.parquet
+/root/qeslab/data/resampled/GBPJPY_H8.parquet
+/root/qeslab/data/resampled/USDCAD_D1.parquet
+/root/qeslab/data/resampled/USDCAD_M30.parquet
+/root/qeslab/data/resampled/GBPUSD_H6.parquet
+/root/qeslab/data/resampled/CADJPY_H2.parquet
+/root/qeslab/data/resampled/USDCHF_M2.parquet
+/root/qeslab/data/resampled/USDJPY_H1.parquet
+/root/qeslab/data/resampled/AUDUSD_W1.parquet
+/root/qeslab/data/resampled/USDCAD_M1.parquet
+/root/qeslab/data/resampled/USDCHF_H2.parquet
+/root/qeslab/data/resampled/GBPUSD_W1.parquet
+/root/qeslab/data/resampled/CADJPY_D1.parquet
+/root/qeslab/data/resampled/CADJPY_M5.parquet
+/root/qeslab/data/resampled/CADJPY_M2.parquet
+/root/qeslab/data/resampled/EURUSD_H1.parquet
+/root/qeslab/data/resampled/USDCAD_W1.parquet
+/root/qeslab/data/resampled/EURJPY_H8.parquet
+/root/qeslab/data/resampled/GBPJPY_M5.parquet
+/root/qeslab/data/resampled/EURUSD_M10.parquet
+/root/qeslab/data/resampled/AUDUSD_M3.parquet
+/root/qeslab/data/resampled/GBPUSD_M1.parquet
+/root/qeslab/data/resampled/GBPUSD_H1.parquet
+/root/qeslab/data/resampled/GBPUSD_H2.parquet
+/root/qeslab/data/resampled/AUDJPY_H4.parquet
+/root/qeslab/data/resampled/EURJPY_M15.parquet
+/root/qeslab/data/resampled/USDCHF_H1.parquet
+/root/qeslab/data/resampled/AUDJPY_D1.parquet
+/root/qeslab/data/resampled/EURUSD_M2.parquet
+/root/qeslab/data/resampled/EURJPY_M10.parquet
+/root/qeslab/data/resampled/USDCHF_W1.parquet
+/root/qeslab/data/resampled/USDCHF_M3.parquet
+/root/qeslab/data/resampled/EURJPY_H4.parquet
+/root/qeslab/data/resampled/USDCAD_H1.parquet
+/root/qeslab/data/resampled/EURUSD_H2.parquet
+/root/qeslab/data/resampled/GBPUSD_H8.parquet
+/root/qeslab/data/resampled/EURUSD_M1.parquet
+/root/qeslab/data/resampled/AUDJPY_W1.parquet
+/root/qeslab/data/resampled/USDJPY_W1.parquet
+/root/qeslab/data/resampled/USDCHF_M5.parquet
+/root/qeslab/data/resampled/USDJPY_M15.parquet
+/root/qeslab/data/resampled/AUDJPY_M2.parquet
+/root/qeslab/data/resampled/GBPUSD_M5.parquet
+/root/qeslab/data/resampled/AUDUSD_M15.parquet
+/root/qeslab/data/resampled/USDJPY_H12.parquet
+/root/qeslab/data/resampled/USDJPY_M10.parquet
+/root/qeslab/data/resampled/EURUSD_W1.parquet
+/root/qeslab/data/resampled/AUDUSD_H8.parquet
+/root/qeslab/data/resampled/USDJPY_H2.parquet
+/root/qeslab/data/resampled/AUDUSD_M2.parquet
+/root/qeslab/data/resampled/USDJPY_H8.parquet
+/root/qeslab/data/resampled/GBPJPY_M30.parquet
+/root/qeslab/data/resampled/AUDUSD_H2.parquet
+/root/qeslab/data/resampled/GBPUSD_H12.parquet
+/root/qeslab/data/resampled/CADJPY_W1.parquet
+/root/qeslab/data/resampled/GBPJPY_W1.parquet
+/root/qeslab/data/resampled/USDJPY_M1.parquet
+/root/qeslab/data/resampled/GBPUSD_M15.parquet
+/root/qeslab/data/resampled/CADJPY_M30.parquet
+/root/qeslab/data/resampled/EURJPY_H2.parquet
+/root/qeslab/data/resampled/GBPJPY_M10.parquet
+/root/qeslab/data/resampled/EURJPY_M1.parquet
+/root/qeslab/data/resampled/AUDUSD_H1.parquet
+/root/qeslab/data/resampled/USDCHF_M10.parquet
+/root/qeslab/data/resampled/USDCHF_H4.parquet
+/root/qeslab/data/resampled/GBPJPY_M15.parquet
+/root/qeslab/data/resampled/EURUSD_M15.parquet
+/root/qeslab/data/resampled/EURUSD_D1.parquet
+/root/qeslab/data/resampled/EURJPY_M2.parquet
+/root/qeslab/data/resampled/AUDUSD_H6.parquet
+/root/qeslab/data/resampled/USDCAD_H6.parquet
+/root/qeslab/data/resampled/EURJPY_M30.parquet
+/root/qeslab/timeout
+/root/qeslab/vault
+/root/qeslab/vault/reports
+/root/qeslab/vault/strategies.db
+/root/qeslab/prefixes
+/root/qeslab/prefixes/mt5_real
+/root/qeslab/prefixes/mt5_real/userdef.reg
+/root/qeslab/prefixes/mt5_real/system.reg
+/root/qeslab/prefixes/mt5_real/drive_c
+/root/qeslab/prefixes/mt5_real/dosdevices
+/root/qeslab/prefixes/mt5_real/user.reg
+/root/qeslab/prefixes/real
+/root/qeslab/prefixes/real/userdef.reg
+/root/qeslab/prefixes/real/system.reg
+/root/qeslab/prefixes/real/drive_c
+/root/qeslab/prefixes/real/dosdevices
+/root/qeslab/prefixes/real/user.reg
+/root/qeslab/prefixes/mt5_otc
+/root/qeslab/prefixes/mt5_otc/userdef.reg
+/root/qeslab/prefixes/mt5_otc/system.reg
+/root/qeslab/prefixes/mt5_otc/drive_c
+/root/qeslab/prefixes/mt5_otc/dosdevices
+/root/qeslab/prefixes/mt5_otc/user.reg
+/root/qeslab/prefixes/mt5_otc/winetricks.log
+/root/qeslab/prefixes/otc
+/root/qeslab/prefixes/otc/userdef.reg
+/root/qeslab/prefixes/otc/system.reg
+/root/qeslab/prefixes/otc/drive_c
+/root/qeslab/prefixes/otc/dosdevices
+/root/qeslab/prefixes/otc/user.reg
+/root/qeslab/agents
+/root/qeslab/agents/memory_agent.py
+/root/qeslab/agents/__pycache__
+/root/qeslab/agents/__pycache__/__init__.cpython-312.pyc
+/root/qeslab/agents/__pycache__/binary_signal_eng.cpython-312.pyc
+/root/qeslab/agents/__pycache__/signal_engine.cpython-312.pyc
+/root/qeslab/agents/__init__.py
+/root/qeslab/agents/evolver.py
+/root/qeslab/agents/researcher.py
+/root/qeslab/agents/auditor.py
+/root/qeslab/agents/binary_researcher.py
+/root/qeslab/agents/binary_signal_eng.py
+/root/qeslab/agents/signal_engine.py
+/root/qeslab/agents/binary_auditor.py
+/root/qeslab/signals
+/root/qeslab/signals/telegram_bot.py
+/root/qeslab/signals/__pycache__
+/root/qeslab/signals/__pycache__/telegram_bot.cpython-312.pyc
+/root/qeslab/signals/__pycache__/formatter.cpython-312.pyc
+/root/qeslab/signals/__pycache__/operator_feedback.cpython-312.pyc
+/root/qeslab/signals/presignal_warner.py
+/root/qeslab/signals/formatter.py
+/root/qeslab/signals/operator_feedback.py
+/root/qeslab/configs
+/root/qeslab/configs/__pycache__
+/root/qeslab/configs/__pycache__/__init__.cpython-312.pyc
+/root/qeslab/configs/__pycache__/settings.cpython-312.pyc
+/root/qeslab/configs/__init__.py
+/root/qeslab/configs/settings.py.bak
+/root/qeslab/configs/settings.py
+/root/qeslab/installers
+/root/qeslab/installers/mt5linux.sh
+/root/qeslab/installers/wget-log
+/root/qeslab/installers/mt5linux64.tar.gz
+/root/qeslab/installers/mt5setup.exe
+/root/qeslab/installers/webview2.exe
+/root/qeslab/installers/mt5_generic.exe
+/root/qeslab/dashboard
+/root/qeslab/dashboard/websocket_server.py
+/root/qeslab/dashboard/ws_server.py
+/root/qeslab/dashboard/templates
+/root/qeslab/dashboard/templates/index.html
+/root/qeslab/dashboard/app.py
+/root/qeslab/memory
+/root/qeslab/memory/success_dna.db
+/root/qeslab/memory/regime_log.db
+/root/qeslab/memory/knowledge_graph.db
+/root/qeslab/memory/stream_state.db
+/root/qeslab/memory/pocket_state.db-wal
+/root/qeslab/memory/execution_quality.db
+/root/qeslab/memory/pocket_state.db
+/root/qeslab/memory/mistake_memory.db
+/root/qeslab/memory/market_conditions.db
+/root/qeslab/memory/pocket_state.db.backup
+/root/qeslab/memory/pocket_state.db-shm
+/root/qeslab/system_blueprint_tree.txt
+/root/qeslab/cli
+/root/qeslab/cli/idea_input.py
+
+2. SERVICE ARCHITECTURE:
+[Unit]
+Description=QES OTC MT5 Bridge (Port 5555)
+After=qes-xvfb.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/qeslab/prefixes/mt5_otc"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine /root/qeslab/prefixes/mt5_otc/drive_c/python39/python.exe -m mt5linux --port 5555
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES REAL MT5 Bridge (Port 18812)
+After=qes-xvfb.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/qeslab/prefixes/real"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine /root/qeslab/prefixes/real/drive_c/python39/python.exe -m mt5linux --port 5551
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES Lab Dashboard & WebSocket
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/qeslab
+Environment="PATH=/root/qeslab/.venv/bin"
+ExecStart=/root/qeslab/.venv/bin/uvicorn dashboard.app:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QESLAB Autonomous Trading Signal System
+After=network.target
+After=qes-bridge-real.service qes-bridge-otc.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/qeslab
+Environment="PYTHONPATH=/root/qeslab"
+ExecStart=/root/qeslab/.venv/bin/python /root/qeslab/main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES Lab Telegram Bot
+After=network.target qeslab-dashboard.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/qeslab
+Environment="PATH=/root/qeslab/.venv/bin"
+ExecStart=/root/qeslab/.venv/bin/python -c "import sys; sys.path.insert(0, '.'); from signals.telegram_bot import bot; bot.run()"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES MT5-Linux RPC Bridge
+After=qes-xvfb.service
+Requires=qes-xvfb.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/.mt5"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine /root/.mt5/drive_c/python39/python.exe -m mt5linux --port 18812
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES OTC MT5 Terminal
+After=qes-bridge-otc.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/qeslab/prefixes/mt5_otc"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine "/root/qeslab/prefixes/mt5_otc/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES REAL MT5 Terminal
+After=qes-bridge-real.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/qeslab/prefixes/mt5_real"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine "/root/qeslab/prefixes/mt5_real/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES MetaTrader 5 Terminal
+After=qes-mt5-bridge.service
+Requires=qes-mt5-bridge.service
+
+[Service]
+Type=simple
+Environment="WINEPREFIX=/root/.mt5"
+Environment="DISPLAY=:1"
+ExecStart=/usr/bin/wine "/root/.mt5/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES Watchdog
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/qeslab
+ExecStart=/root/qeslab/qes-venv/bin/python3 /root/qeslab/scripts/watchdog.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=QES Virtual Display (Xvfb)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x16
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+3. ENVIRONMENT VARIABLES:
+# ─── LLM PROVIDERS ──────────────────────────
+TOKENMIX_API_KEY=sk-tm-YtUDQgHdaG4Nn7jHZws9Y9pzmwFx2hBKjXLpODDt2l9T6aGH
+TOKENMIX_BASE_URL=https://api.tokenmix.ai/v1
+GROQ_API_KEY=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
+GROQ_BASE_URL=https://api.groq.com/openai/v1
+GEMINI_KEY_1=AIzaSyDyl2UZ7AV5QvjKY84K-mSrDuZ3W0lHI7Q
+GEMINI_KEY_2=AIzaSyDvDfl1X4rE8hukXBTI4p1LvI39cBV2qc8
+GEMINI_KEY_3=AIzaSyBqWDq8oW8WC9onWaYY88X9bVm-IKZoxA8
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+
+# ─── AGENT MODELS ────────────────────────────
+RESEARCHER_MODEL=gpt-oss-120b
+RESEARCHER_PROVIDER=groq
+RESEARCHER_THINKING=high
+RESEARCHER_MAX_TOKENS=2000
+AUDITOR_MODEL=gpt-oss-120b
+AUDITOR_PROVIDER=groq
+AUDITOR_THINKING=high
+AUDITOR_MAX_TOKENS=1500
+EVOLVER_MODEL=qwen3-32b
+EVOLVER_PROVIDER=groq
+EVOLVER_THINKING=true
+EVOLVER_MAX_TOKENS=1000
+MEMORY_MODEL=gemini-3-flash-preview
+MEMORY_PROVIDER=gemini_1
+MEMORY_THINKING=false
+MEMORY_MAX_TOKENS=400
+SIGNAL_MODEL=gemini-3-flash-preview
+SIGNAL_PROVIDER=gemini_2
+SIGNAL_THINKING=false
+SIGNAL_MAX_TOKENS=300
+REGIME_MODEL=gemini-3-flash-preview
+REGIME_PROVIDER=gemini_3
+REGIME_THINKING=false
+REGIME_MAX_TOKENS=200
+OVERFLOW_CRITICAL_MODEL=deepseek-v4-pro
+OVERFLOW_STANDARD_MODEL=deepseek-v4-flash
+OVERFLOW_PROVIDER=tokenmix
+
+# ─── MT5 BRIDGE ──────────────────────────────
+MT5_OTC_BRIDGE_HOST=localhost
+MT5_OTC_BRIDGE_PORT=5555
+MT5_OTC_LOGIN=12175919
+MT5_OTC_PASSWORD=sZ6U3U8ENYLQ!
+MT5_OTC_SERVER=PoTrade-MT5
+MT5_REAL_BRIDGE_HOST=localhost
+MT5_REAL_BRIDGE_PORT=5556
+MT5_REAL_LOGIN=435822528
+MT5_REAL_PASSWORD=PVqrgJM3-!xLwTN
+MT5_REAL_SERVER=Exness-MT5Trial9
+
+# ─── DATA FEEDS ──────────────────────────────
+TWELVEDATA_API_KEY=3af1f2d9106e46ed8a244bf699c65e12
+NEWS_SCRAPE_URL=https://www.forexfactory.com/calendar
+STALE_DATA_TIMEOUT=30
+
+# ─── TIMEZONE ────────────────────────────────
+SYSTEM_TIMEZONE=UTC
+OPERATOR_TIMEZONE=Africa/Kampala
+BROKER1_TIMEZONE=UTC
+BROKER2_TIMEZONE=UTC
+
+# ─── SESSIONS (UTC) ──────────────────────────
+SESSION_ASIAN_START=23:00
+SESSION_ASIAN_END=08:00
+SESSION_LONDON_START=07:00
+SESSION_LONDON_END=16:00
+SESSION_NY_START=12:00
+SESSION_NY_END=21:00
+OVERLAP_LONDON_NY_START=12:00
+OVERLAP_LONDON_NY_END=16:00
+OVERLAP_CONFLUENCE_MIN=4
+
+# ─── ALERTS ──────────────────────────────────
+TELEGRAM_BOT_TOKEN=8581426129:AAGZkiesWh_gOREIJzbjvtAV1B8XidTLUN0
+TELEGRAM_ALLOWED_USER_IDS=6154687692
+TELEGRAM_INLINE_KEYBOARD=true
+PRESIGNAL_WARNING_SECONDS=30
+
+# ─── DASHBOARD ───────────────────────────────
+DASHBOARD_USERNAME=admin
+DASHBOARD_PASSWORD=boCapgjo
+DASHBOARD_PORT=8000
+WEBSOCKET_PORT=8001
+DASHBOARD_MOBILE_FIRST=true
+
+# ─── DAILY BRIEFING ──────────────────────────
+BRIEFING_TIME_UTC=06:00
+BRIEFING_ENABLED=true
+
+# ─── POCKET MANAGER ──────────────────────────
+PM_POLL_INTERVAL=60
+PM_DD_ALERT_THRESHOLD=0.80
+PM_COOLDOWN_MINUTES=30
+
+# ─── STREAM CONTROL ──────────────────────────
+STREAM_FOREX_ENABLED=true
+STREAM_BINARY_ENABLED=true
+STREAM_DAY_ENABLED=true
+STREAM_SWING_ENABLED=true
+STREAM_BINARY_5M_ENABLED=true
+STREAM_BINARY_10M_ENABLED=true
+
+# ─── BINARY RAPID FIRE ───────────────────────
+BINARY_RAPID_FIRE=true
+BINARY_STRATEGY_ALIGNMENT=false
+BINARY_MAX_DAILY_SIGNALS=0
+BINARY_CONFLICT_RESOLUTION=highest_confidence
+
+# ─── SIGNAL EXPIRY ───────────────────────────
+SIGNAL_EXPIRY_M15=15
+SIGNAL_EXPIRY_H1=60
+SIGNAL_EXPIRY_H4=240
+SIGNAL_EXPIRY_D1=1440
+
+# ─── GITHUB BACKUP ───────────────────────────
+GITHUB_BACKUP_REPO=https://github.com/enocknalumoso/QESLAB.git
+GITHUB_TOKEN=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
+
+# ─── SYSTEM ──────────────────────────────────
+SEED=42
+DATA_RAW_PATH=/root/qeslab/data/raw
+DATA_RESAMPLED_PATH=/root/qeslab/data/resampled
+VAULT_DB_PATH=/root/qeslab/vault/strategies.db
+MEMORY_DB_PATH=/root/qeslab/memory/mistake_memory.db
+LOG_PATH=/root/qeslab/logs
+
+# ─── RISK ENGINE ─────────────────────────────
+MAX_PORTFOLIO_HEAT_FOREX=0.06
+MAX_PORTFOLIO_HEAT_BINARY=0.04
+KELLY_FRACTION=0.25
+FOREX_DAILY_LOSS_HALT=0.05
+FOREX_WEEKLY_CIRCUIT_BREAKER=0.05
+BINARY_DAILY_LOSS_HALT=0.03
+MAX_RISK_PER_TRADE=0.02
+NEWS_BLACKOUT_MINUTES=15
+
+# ─── PROP FIRM ───────────────────────────────
+PROP_PHASE1_TARGET=0.10
+PROP_PHASE2_TARGET=0.05
+PROP_MAX_DAILY_DD=0.05
+PROP_MAX_TOTAL_DD=0.10
+PROP_MAX_DAILY_DD_BUFFER=0.045
+PROP_MAX_TOTAL_DD_BUFFER=0.08
+PROP_MAX_DAILY_GAIN=0.03
+PROP_MIN_TRADING_DAYS=4
+PROP_NO_WEEKEND_HOLDS=true
+PROP_MAX_CONSECUTIVE_LOSSES=6
+PROP_COOLDOWN_MINUTES=30
+
+# ─── FOREX PASS CRITERIA ─────────────────────
+FOREX_MIN_WIN_RATE=0.50
+FOREX_MIN_SHARPE=1.3
+FOREX_MIN_DEFLATED_SHARPE=1.1
+FOREX_MIN_PROFIT_FACTOR=1.6
+FOREX_TARGET_PROFIT_FACTOR=2.0
+FOREX_MAX_DD=0.08
+FOREX_MIN_TRADES=200
+FOREX_MIN_RR=1.5
+FOREX_MIN_RECOVERY_FACTOR=2.0
+FOREX_PVALUE_THRESHOLD=0.05
+FOREX_MAX_INSTRUMENT_CONCENTRATION=0.40
+FOREX_MAX_CONSECUTIVE_LOSSES=6
+FOREX_OOS_TOLERANCE=0.05
+
+# ─── BINARY PASS CRITERIA ────────────────────
+BINARY_PAYOUT=0.89
+BINARY_BREAKEVEN_WR=0.529
+BINARY_5M_MIN_WIN_RATE=0.62
+BINARY_10M_MIN_WIN_RATE=0.60
+BINARY_MIN_SHARPE=1.4
+BINARY_MIN_PROFIT_FACTOR=1.34
+BINARY_MAX_DD=0.10
+BINARY_MIN_TRADES=500
+BINARY_MIN_EV=0.08
+BINARY_MONTE_CARLO_RUNS=1000
+BINARY_PVALUE_THRESHOLD=0.05
+BINARY_OOS_TOLERANCE=0.03
+BINARY_MAX_CONSECUTIVE_LOSSES=8
+
+# ─── BACKTESTING ─────────────────────────────
+BACKTEST_TRAIN_RATIO=0.70
+BACKTEST_MONTE_CARLO_RUNS=1000
+BACKTEST_WALK_FORWARD_WINDOWS=4
+WALK_FORWARD_INCREMENT_MONTHS=3
+BACKTEST_MIN_YEARS=5
+STRESS_TEST_ENABLED=true
+CHECKPOINT_INTERVAL_MINUTES=10
+CACHE_HIT_TARGET=0.90
+
+# ─── SPREADS (pips) ──────────────────────────
+SPREAD_EURUSD=0.8
+SPREAD_GBPUSD=1.0
+SPREAD_USDJPY=0.8
+SPREAD_AUDUSD=1.0
+SPREAD_USDCAD=1.2
+SPREAD_USDCHF=1.2
+SPREAD_NZDUSD=1.3
+SPREAD_EURJPY=1.2
+SPREAD_GBPJPY=1.8
+SPREAD_AUDJPY=1.4
+SPREAD_CADJPY=1.6
+SPREAD_CHFJPY=1.6
+SPREAD_NZDJPY=1.8
+
+# ─── EVOLVER GUARDRAILS ──────────────────────
+EVOLVER_MAX_GENERATIONS=5
+EVOLVER_MAX_ITERATIONS=10
+EVOLVER_MIN_IMPROVEMENT=0.02
+EVOLVER_SIMILARITY_THRESHOLD=0.85
+EVOLVER_SHARPE_DELTA_MIN=0.05
+
+# ─── BUDGET ──────────────────────────────────
+MONTHLY_BUDGET_USD=5.00
+BUDGET_ALERT_THRESHOLD=3.50
+BUDGET_HARD_STOP=5.00
+BUDGET_DOWNGRADE_THRESHOLD=4.00
+BUDGET_DOWNGRADE_MODEL=deepseek-v4-flash
+
+# ─── COLD START ──────────────────────────────
+COLD_START_MIN_STRATEGIES=5
+COLD_START_PROGRESS_ENABLED=true
+OVERLAP_LONDON_NY_START=13:00
+OVERLAP_LONDON_NY_END=16:00
+
+4. PYTHON DEPENDENCIES:
+
+5. CORE BRIDGE & ORCHESTRATION LOGIC:
+from mt5linux import MetaTrader5
+from loguru import logger
+import asyncio
+from typing import Callable
+
+class MT5Bridge:
+    def __init__(self, port: int):
+        self.port = port
+        self.mt5 = MetaTrader5(host="localhost", port=self.port)
+        self.connected = False
+
+    def connect(self) -> bool:
+        if self.mt5.initialize():
+            self.connected = True
+            logger.info(f"Connected to Bridge on Port {self.port}")
+            return True
+        return False
+
+    async def listen_real(self, callback: Callable):
+        logger.info(f"Starting REAL listener on {self.port}")
+        while True:
+            if self.connected:
+                await asyncio.sleep(1)
+            await asyncio.sleep(1)
+
+    async def listen_otc(self, callback: Callable):
+        logger.info(f"Starting OTC listener on {self.port}")
+        while True:
+            if self.connected:
+                await asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
+
+real_bridge = MT5Bridge(port=5551)
+otc_bridge = MT5Bridge(port=5555)
+import asyncio
+from core.mt5_bridge import real_bridge, otc_bridge
+from agents.signal_engine import signal_engine
+from agents.binary_signal_eng import binary_signal_engine
+from core.strategy_vault import strategy_vault
+from signals.formatter import format_forex, format_binary
+from loguru import logger
+
+class Orchestrator:
+    def __init__(self):
+        self.active_forex_strats = []
+        self.active_binary_strats =[]
+
+    def refresh_vault(self):
+        self.active_forex_strats = strategy_vault.get_active_strategies("FOREX")
+        self.active_binary_strats = strategy_vault.get_active_strategies("BINARY")
+
+    async def handle_tick(self, msg, stream_type):
+        pair = msg.get('symbol')
+        price = msg.get('bid')
+        spread = msg.get('spread', 0.0)
+
+        if stream_type == "REAL":
+            signal = signal_engine.process_live_data(pair, "H1", price, {"risk": 0.02})
+            if signal:
+                logger.info(f"FOREX SIGNAL: {pair} | Spread: {spread}")
+        elif stream_type == "OTC":
+            signals = binary_signal_engine.process_tick(pair, price, self.active_binary_strats)
+            for sig in signals:
+                logger.info(f"BINARY SIGNAL: {pair} | {sig['direction']} | Spread: {spread}")
+
+    async def run_forever(self):
+        logger.info("QESLAB Orchestrator Starting...")
+        self.refresh_vault()
+        await asyncio.gather(
+            real_bridge.listen_real(self.handle_tick),
+            otc_bridge.listen_otc(self.handle_tick)
+        )
+
+orchestrator = Orchestrator()

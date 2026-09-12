@@ -1,0 +1,10 @@
+.env
+*.db
+*.parquet
+__pycache__/
+*.pyc
+.venv/
+logs/
+backups/
+data/
+qeslab-main/
